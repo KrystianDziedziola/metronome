@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class MainWindow {
 	private JFrame mainFrame;
@@ -13,6 +14,10 @@ public class MainWindow {
 		
 	private JButton togglePlayButton;
 	private Dimension togglePlayButtonDimension = new Dimension(100, 50);
+	
+	private JTextField tempoTextField;
+	private Dimension tempoTextFieldDimension = new Dimension(100, 100);
+
 
 	public MainWindow() {
 		initialize();
@@ -21,23 +26,22 @@ public class MainWindow {
 	public void show() {
 		mainFrame.setVisible(true);
 	}
-	
-	
 
 	private void initialize() {
 		initializeMainFrame();
 		initializeButtons();
+		initializeTextFields();
 	}
 	
 	private void initializeMainFrame() {
 		mainFrame = new JFrame();
-		mainFrame.getContentPane().setLayout(null);
 		setupMainFrameProperties();
 		centerMainFrame();
 	}
 	
 	private void setupMainFrameProperties() {
 		mainFrame.setTitle("Metronome");
+		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setSize(mainFrameDimension);
 		mainFrame.setResizable(false);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,8 +65,23 @@ public class MainWindow {
 			}
 		});
 		togglePlayButton.setSize(togglePlayButtonDimension);
-		
-		//togglePlayButton.setLocation();
+		centerTogglePlayButton();
+		//TODO: use layouts for placing components vertically
 		mainFrame.getContentPane().add(togglePlayButton);
+	}
+	
+	private void centerTogglePlayButton() {
+		togglePlayButton.setLocation((mainFrame.getWidth() - togglePlayButton.getWidth()) / 2, 0);
+	}
+	
+	private void initializeTextFields() {
+		initializeTempoTextField();
+	}
+	
+	private void initializeTempoTextField() {
+		tempoTextField = new JTextField();
+		tempoTextField.setLocation(0, 0);
+		tempoTextField.setSize(tempoTextFieldDimension);
+		mainFrame.getContentPane().add(tempoTextField);
 	}
 }
