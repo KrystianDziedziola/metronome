@@ -2,7 +2,10 @@ package edu.metronome.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
-import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
+import javax.swing.text.NumberFormatter;
+
+import edu.metronome.logic.Click;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -10,14 +13,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.TextField;
 import java.lang.String;
+import java.text.NumberFormat;
 
 public class MainWindow {
 	
 	private final int TOP_MARIGIN_IN_PIXELS = 50;
+	private final int BOTTOM_MARIGIN_IN_PIXELS = 50;
+	
 	private final String FONT_NAME = "Tahoma";
 	private final int FONT_SIZE_IN_TEMPO_TEXT_FIELD = 50;
+	
+	private final int MINIMUM_TEMPO_VALUE = 0;
+	private final int MAXIMUM_TEMPO_VALUE = 255;
 	
 	private Container mainFramePane;
 	
@@ -27,8 +35,10 @@ public class MainWindow {
 	private JButton togglePlayButton;
 	private Dimension togglePlayButtonDimension = new Dimension(100, 50);
 	
-	private JTextField tempoTextField;
+	private JFormattedTextField tempoTextField;
 	private Dimension tempoTextFieldDimension = new Dimension(100, 80);
+	
+	private Click click = new Click();
 
 	public MainWindow() {
 		initialize();
@@ -83,7 +93,8 @@ public class MainWindow {
 	
 	private void placeTogglePlayButton() {
 		int x = getXValueToPlaceComponentInTheCenter(togglePlayButton.getWidth());
-		togglePlayButton.setLocation(x, 0);
+		int y = mainFrame.getWidth() - BOTTOM_MARIGIN_IN_PIXELS;
+		togglePlayButton.setLocation(x, y);
 	}
 	
 	private int getXValueToPlaceComponentInTheCenter(final int COMPONENT_WIDTH) {
@@ -95,22 +106,32 @@ public class MainWindow {
 	}
 	
 	private void initializeTempoTextField() {
-		tempoTextField = new JTextField();
+		tempoTextField = new JFormattedTextField(getTextFormatForTempoTextField());
 		setupTempoTextFieldProperties();
 		placeTempoTextField();
 		mainFramePane.add(tempoTextField);
 	}
 	
+	private NumberFormatter getTextFormatForTempoTextField() {
+		NumberFormat inputFormat = NumberFormat.getInstance();
+		NumberFormatter inputFormatter = new NumberFormatter(inputFormat);
+		inputFormatter.setValueClass(Integer.class);
+		inputFormatter.setMinimum(MINIMUM_TEMPO_VALUE);
+		inputFormatter.setMaximum(MAXIMUM_TEMPO_VALUE);
+		inputFormatter.setCommitsOnValidEdit(true);
+		return inputFormatter;
+	}
+	
 	private void setupTempoTextFieldProperties() {
 		tempoTextField.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_IN_TEMPO_TEXT_FIELD));
-		tempoTextField.setHorizontalAlignment(JTextField.CENTER);
-		//TODO: create a limit of characters this in text field and tempo range 0-250
-		//tempoTextField.setDocument(new TextFieldLimit(3));
+		tempoTextField.setHorizontalAlignment(JFormattedTextField.CENTER);
+		tempoTextField.setText(Integer.toString(click.getCurrentTempo()));
 		tempoTextField.setSize(tempoTextFieldDimension);
 	}
 	
 	private void placeTempoTextField() {
 		int x = getXValueToPlaceComponentInTheCenter(tempoTextField.getWidth());
-		tempoTextField.setLocation(x, TOP_MARIGIN_IN_PIXELS);
+		int y = TOP_MARIGIN_IN_PIXELS;
+		tempoTextField.setLocation(x, y);
 	}
 }
