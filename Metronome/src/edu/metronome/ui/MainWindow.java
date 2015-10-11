@@ -1,14 +1,26 @@
 package edu.metronome.ui;
 
 import javax.swing.JFrame;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.TextField;
+import java.lang.String;
+
 public class MainWindow {
+	
+	private final int TOP_MARIGIN_IN_PIXELS = 50;
+	private final String FONT_NAME = "Tahoma";
+	private final int FONT_SIZE_IN_TEMPO_TEXT_FIELD = 50;
+	
+	private Container mainFramePane;
+	
 	private JFrame mainFrame;
 	private Dimension mainFrameDimension = new Dimension(400, 500);
 		
@@ -16,8 +28,7 @@ public class MainWindow {
 	private Dimension togglePlayButtonDimension = new Dimension(100, 50);
 	
 	private JTextField tempoTextField;
-	private Dimension tempoTextFieldDimension = new Dimension(100, 100);
-
+	private Dimension tempoTextFieldDimension = new Dimension(100, 80);
 
 	public MainWindow() {
 		initialize();
@@ -29,6 +40,7 @@ public class MainWindow {
 
 	private void initialize() {
 		initializeMainFrame();
+		mainFramePane = mainFrame.getContentPane();
 		initializeButtons();
 		initializeTextFields();
 	}
@@ -41,9 +53,9 @@ public class MainWindow {
 	
 	private void setupMainFrameProperties() {
 		mainFrame.setTitle("Metronome");
-		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setSize(mainFrameDimension);
 		mainFrame.setResizable(false);
+		mainFrame.getContentPane().setLayout(null);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -65,13 +77,17 @@ public class MainWindow {
 			}
 		});
 		togglePlayButton.setSize(togglePlayButtonDimension);
-		centerTogglePlayButton();
-		//TODO: use layouts for placing components vertically
-		mainFrame.getContentPane().add(togglePlayButton);
+		placeTogglePlayButton();
+		mainFramePane.add(togglePlayButton);
 	}
 	
-	private void centerTogglePlayButton() {
-		togglePlayButton.setLocation((mainFrame.getWidth() - togglePlayButton.getWidth()) / 2, 0);
+	private void placeTogglePlayButton() {
+		int x = getXValueToPlaceComponentInTheCenter(togglePlayButton.getWidth());
+		togglePlayButton.setLocation(x, 0);
+	}
+	
+	private int getXValueToPlaceComponentInTheCenter(final int COMPONENT_WIDTH) {
+		return ((mainFrame.getWidth() - COMPONENT_WIDTH) / 2);
 	}
 	
 	private void initializeTextFields() {
@@ -80,8 +96,21 @@ public class MainWindow {
 	
 	private void initializeTempoTextField() {
 		tempoTextField = new JTextField();
-		tempoTextField.setLocation(0, 0);
+		setupTempoTextFieldProperties();
+		placeTempoTextField();
+		mainFramePane.add(tempoTextField);
+	}
+	
+	private void setupTempoTextFieldProperties() {
+		tempoTextField.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_IN_TEMPO_TEXT_FIELD));
+		tempoTextField.setHorizontalAlignment(JTextField.CENTER);
+		//TODO: create a limit of characters this in text field and tempo range 0-250
+		//tempoTextField.setDocument(new TextFieldLimit(3));
 		tempoTextField.setSize(tempoTextFieldDimension);
-		mainFrame.getContentPane().add(tempoTextField);
+	}
+	
+	private void placeTempoTextField() {
+		int x = getXValueToPlaceComponentInTheCenter(tempoTextField.getWidth());
+		tempoTextField.setLocation(x, TOP_MARIGIN_IN_PIXELS);
 	}
 }
