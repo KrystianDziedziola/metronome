@@ -28,11 +28,11 @@ public class Click {
 		return DEFAULT_TEMPO;
 	}
 	
-	public void setTempo(final int VALUE) {
-		if((VALUE < MINIMUM_TEMPO) || (VALUE > MAXIMUM_TEMPO)) {
+	public void setTempo(int value) {
+		if((value < MINIMUM_TEMPO) || (value > MAXIMUM_TEMPO)) {
 			//TODO: throw exception
 		} else {
-			currentTempo = VALUE;
+			currentTempo = value;
 		}
 	}
 }

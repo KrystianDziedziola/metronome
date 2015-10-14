@@ -112,8 +112,8 @@ public class MainWindow {
 		togglePlayButton.setLocation(x, y);
 	}
 	
-	private int getXValueToPlaceComponentInTheCenter(final int COMPONENT_WIDTH) {
-		return ((mainFrame.getWidth() - COMPONENT_WIDTH) / 2);
+	private int getXValueToPlaceComponentInTheCenter(int componentWidth) {
+		return ((mainFrame.getWidth() - componentWidth) / 2);
 	}
 	
 	private void initializeTempoSpinner() {
