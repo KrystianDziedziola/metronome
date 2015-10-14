@@ -1,5 +1,7 @@
 package edu.metronome.ui;
 
+import edu.metronome.logic.Click;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
@@ -9,8 +11,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
-
-import edu.metronome.logic.Click;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -97,13 +97,24 @@ public class MainWindow {
 	
 	private void initializeTogglePlayButton() {
 		togglePlayButton = new JButton("Start");
-		togglePlayButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-			}
-		});
 		togglePlayButton.setSize(togglePlayButtonDimension);
 		placeTogglePlayButton();
+		defineTogglePlayClickEvent();
 		mainFramePane.add(togglePlayButton);
+	}
+	
+	private void defineTogglePlayClickEvent() {
+		togglePlayButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if(click.isPlaying()) {
+					togglePlayButton.setText("Start");
+					click.stop();
+				} else {
+					togglePlayButton.setText("Stop");
+					click.play();
+				}
+			}
+		});
 	}
 	
 	private void placeTogglePlayButton() {
