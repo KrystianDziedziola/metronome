@@ -1,6 +1,7 @@
 package edu.metronome.ui;
 
 import edu.metronome.logic.Click;
+import edu.metronome.logic.TempoOutOfBoundsException;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -33,9 +34,9 @@ public class MainWindow {
 	private final String FONT_NAME = "Tahoma";
 	private final int FONT_SIZE_IN_TEMPO_SPINNER = 50;
 	
-	private final int MINIMUM_TEMPO_VALUE = click.getMinimumTempo();
-	private final int MAXIMUM_TEMPO_VALUE = click.getMaximumTempo();
-	private final int DEFAULT_TEMPO_VALUE = click.getDefaultTempo();
+	private final int MINIMUM_TEMPO_VALUE = click.MINIMUM_TEMPO;
+	private final int MAXIMUM_TEMPO_VALUE = click.MAXIMUM_TEMPO;
+	private final int DEFAULT_TEMPO_VALUE = click.DEFAULT_TEMPO;
 	private final int TEMPO_STEP_SIZE_FOR_SPINNER = 1;
 	private final int MINOR_TICK_SIZE_FOR_SLIDER = 10;
 	private final int MAJOR_TICK_SIZE_FOR_SLIDER = 50;
@@ -109,12 +110,19 @@ public class MainWindow {
 				if(click.isPlaying()) {
 					togglePlayButton.setText("Start");
 					click.stop();
+					setTempoEditing(true);
 				} else {
 					togglePlayButton.setText("Stop");
 					click.play();
+					setTempoEditing(false);
 				}
 			}
 		});
+	}
+	
+	private void setTempoEditing(boolean isTempoEditingEnabled) {
+		tempoSlider.setEnabled(isTempoEditingEnabled);
+		tempoSpinner.setEnabled(isTempoEditingEnabled);
 	}
 	
 	private void placeTogglePlayButton() {
@@ -161,7 +169,11 @@ public class MainWindow {
 			public void stateChanged(ChangeEvent event) {
 				int tempoSpinnerValue = (int) tempoSpinner.getValue();
 				tempoSlider.setValue(tempoSpinnerValue);
-				click.setTempo(tempoSpinnerValue);
+				try {
+					click.setTempo(tempoSpinnerValue);
+				} catch (TempoOutOfBoundsException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -204,7 +216,11 @@ public class MainWindow {
 			public void stateChanged(ChangeEvent event) {
 				int tempoSliderValue = tempoSlider.getValue();
 				tempoSpinner.setValue(tempoSliderValue);
-				click.setTempo(tempoSliderValue);
+				try {
+					click.setTempo(tempoSliderValue);
+				} catch (TempoOutOfBoundsException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

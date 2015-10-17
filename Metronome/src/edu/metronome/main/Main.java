@@ -6,6 +6,10 @@ import edu.metronome.ui.MainWindow;
 
 public class Main {
 
+	public static void main(String[] args) {
+		new Main(args);
+	}
+	
 	public Main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -19,7 +23,5 @@ public class Main {
 		});
 	}
 	
-	public static void main(String[] args) {
-		new Main(args);
-	}
+	
 }

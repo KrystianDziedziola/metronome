@@ -5,69 +5,85 @@ import java.net.URL;
 import javax.sound.sampled.*;
 import java.io.*;
 
+
 public class Click {
 	
-	private final int MINIMUM_TEMPO = 30;
-	private final int MAXIMUM_TEMPO = 230;
-	private final int DEFAULT_TEMPO = 120;
+	public final int MINIMUM_TEMPO = 30;
+	public final int MAXIMUM_TEMPO = 230;
+	public final int DEFAULT_TEMPO = 120;
+	
 	private final int SECONDS_PER_MINUTE = 60;
 	private final int MILLISECONDS_PER_SECOND = 1000;
 	
 	private int currentTempo = DEFAULT_TEMPO;
-	private double timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
+	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
 	private String currentClickSoundFileName = "woodBlockClick.wav";
 	private Clip clickSoundClip;
 	
+	private TempoOutOfBoundsException tempoOutOfBoundsException = 
+			new TempoOutOfBoundsException("Tempo out of bounds");
+	
+	private Thread clickThread = null;
+	
+	
 	public Click() {
 		initializeClickSound();
-	}
-	
-	public int getMinimumTempo() {
-		return MINIMUM_TEMPO;
-	}
-	
-	public int getMaximumTempo() {
-		return MAXIMUM_TEMPO;
 	}
 	
 	public int getCurrentTempo() {
 		return currentTempo;
 	}
 	
-	public int getDefaultTempo() {
-		return DEFAULT_TEMPO;
-	}
-	
-	public void setTempo(int value) {
+	public void setTempo(int value) throws TempoOutOfBoundsException {
 		if((value < MINIMUM_TEMPO) || (value > MAXIMUM_TEMPO)) {
-			//TODO: throw exception
+			throw tempoOutOfBoundsException;
 		} else {
 			currentTempo = value;
 		}
 	}
 	
 	public void play() {
-		System.out.println("Playing");
-		System.out.println("Bpm: " + currentTempo);
-		System.out.println("Ms: " + convertBmpToMilliseconds(currentTempo));
 		isPlaying = true;
-		clickSoundClip.start();
+		if(clickThread == null) {
+			timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(currentTempo);
+			createClickThread();
+			clickThread.start();
+		}
 	}
 	
-	//TODO: click is playing only one time for now
+	private void createClickThread() {
+		clickThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(true) {
+					clickSoundClip.start();
+					pauseClickThread(timeBetweenClicksInMilliseconds);
+					resetClickSoundClip();
+				}
+			}
+		});
+	}
 	
-	public void stop() {
-		System.out.println("Stopped");
-		isPlaying = false;
-		clickSoundClip.stop();
-		/*
+	private void pauseClickThread(int timeInMilliseconds) {
 		try {
-			Thread.sleep(timeBetweenClicksInMilliseconds);
+			Thread.sleep(timeInMilliseconds);
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		//*/
+	}
+	
+	private void resetClickSoundClip() {
+		clickSoundClip.flush();
+		clickSoundClip.setFramePosition(0);
+	}
+	
+	public void stop() {
+		isPlaying = false;
+		if(clickThread != null) {
+			clickThread.stop();
+			clickThread = null;
+		}
 	}
 	
 	public boolean isPlaying() {
@@ -89,9 +105,9 @@ public class Click {
 	    }
 	}
 	
-	//TODO: change casting, types, round or something
-	private double convertBmpToMilliseconds(int bpm) {
-		double beatsPerSecond = (double) (SECONDS_PER_MINUTE) / (double) (bpm);
-		return (beatsPerSecond * MILLISECONDS_PER_SECOND);
+	private int convertBmpToMilliseconds(int bpm) {
+		double beatsPerSecond = (double) SECONDS_PER_MINUTE / (double) bpm;
+		double millisecondsBetweenClick = beatsPerSecond * MILLISECONDS_PER_SECOND;
+		return (int) Math.round(millisecondsBetweenClick);
 	}
 }
