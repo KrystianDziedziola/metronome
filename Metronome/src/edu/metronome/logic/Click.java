@@ -54,7 +54,7 @@ public class Click {
 		clickThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(true) {
+				while(isPlaying) {
 					clickSoundClip.start();
 					pauseClickThread(timeBetweenClicksInMilliseconds);
 					resetClickSoundClip();
@@ -78,10 +78,7 @@ public class Click {
 	
 	public void stop() {
 		isPlaying = false;
-		if(clickThread != null) {
-			clickThread.stop();
-			clickThread = null;
-		}
+		clickThread = null;
 	}
 	
 	public boolean isPlaying() {
