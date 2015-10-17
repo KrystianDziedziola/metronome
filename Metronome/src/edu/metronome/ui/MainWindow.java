@@ -110,19 +110,12 @@ public class MainWindow {
 				if(click.isPlaying()) {
 					togglePlayButton.setText("Start");
 					click.stop();
-					setTempoEditing(true);
 				} else {
 					togglePlayButton.setText("Stop");
 					click.play();
-					setTempoEditing(false);
 				}
 			}
 		});
-	}
-	
-	private void setTempoEditing(boolean isTempoEditingEnabled) {
-		tempoSlider.setEnabled(isTempoEditingEnabled);
-		tempoSpinner.setEnabled(isTempoEditingEnabled);
 	}
 	
 	private void placeTogglePlayButton() {

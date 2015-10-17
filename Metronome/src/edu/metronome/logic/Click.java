@@ -5,7 +5,6 @@ import java.net.URL;
 import javax.sound.sampled.*;
 import java.io.*;
 
-
 public class Click {
 	
 	public final int MINIMUM_TEMPO = 30;
@@ -19,13 +18,12 @@ public class Click {
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
 	private String currentClickSoundFileName = "woodBlockClick.wav";
-	private Clip clickSoundClip;
+	private Clip clickSoundClip = null;
 	
 	private TempoOutOfBoundsException tempoOutOfBoundsException = 
 			new TempoOutOfBoundsException("Tempo out of bounds");
 	
 	private Thread clickThread = null;
-	
 	
 	public Click() {
 		initializeClickSound();
@@ -40,13 +38,13 @@ public class Click {
 			throw tempoOutOfBoundsException;
 		} else {
 			currentTempo = value;
+			timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(currentTempo);
 		}
 	}
 	
 	public void play() {
 		isPlaying = true;
 		if(clickThread == null) {
-			timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(currentTempo);
 			createClickThread();
 			clickThread.start();
 		}
