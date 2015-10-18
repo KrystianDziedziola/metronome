@@ -15,7 +15,7 @@ public class Click {
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
 	
-	private List<ClickSoundClip> clickSoundClip = new ArrayList<ClickSoundClip>();
+	private Vector<ClickSoundClip> clickSoundClip = new Vector<ClickSoundClip>();
 	private int indexOfCurrentlyChosenSound = 0;
 	
 	private TempoOutOfBoundsException tempoOutOfBoundsException = 
@@ -48,6 +48,24 @@ public class Click {
 		}
 	}
 	
+	public void stop() {
+		isPlaying = false;
+		clickThread = null;
+	}
+	
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+	
+	public String getClickSoundClipName(int index) {
+		return clickSoundClip.get(index).getSoundName();
+	}
+	
+	public int getNumberOfClickSounds() {
+		return ClickSoundClip.getNumberOfSounds();
+	}
+	
+	
 	private void initializeClickSoundClips() {
 		clickSoundClip.add(new ClickSoundClip("Wood", "woodBlockClick.wav"));
 		clickSoundClip.add(new ClickSoundClip("Steel", "steelBlockClick.wav"));
@@ -72,15 +90,6 @@ public class Click {
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void stop() {
-		isPlaying = false;
-		clickThread = null;
-	}
-	
-	public boolean isPlaying() {
-		return isPlaying;
 	}
 	
 	private int convertBmpToMilliseconds(int bpm) {

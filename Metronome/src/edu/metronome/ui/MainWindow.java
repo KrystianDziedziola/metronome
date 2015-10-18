@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -21,6 +22,7 @@ import java.awt.Container;
 import java.awt.Font;
 
 import java.lang.String;
+import java.util.*;
 
 
 public class MainWindow {
@@ -30,6 +32,7 @@ public class MainWindow {
 	private final int TOP_MARIGIN_IN_PIXELS = 50;
 	private final int BOTTOM_MARIGIN_IN_PIXELS = 50;
 	private final int TEMPO_SPINNER_BOTTOM_MARIGIN = 20;
+	private final int TEMPO_SLIDER_BOTTOM_MARIGIN = 30;
 	
 	private final String FONT_NAME = "Tahoma";
 	private final int FONT_SIZE_IN_TEMPO_SPINNER = 50;
@@ -54,6 +57,9 @@ public class MainWindow {
 	
 	private JSlider tempoSlider;
 	private Dimension tempoSliderDimension = new Dimension(250, 45);
+	
+	private JComboBox<String> clickSoundComboBox;
+	private Dimension clickSoundComboBoxDimension = new Dimension(100, 20);
 
 	public MainWindow() {
 		initialize();
@@ -69,6 +75,7 @@ public class MainWindow {
 		initializeButtons();
 		initializeTempoSpinner();
 		initializeTempoSlider();
+		initializeClickSoundCheckBox();
 	}
 	
 	private void initializeMainFrame() {
@@ -216,5 +223,30 @@ public class MainWindow {
 				}
 			}
 		});
+	}
+	
+	private void initializeClickSoundCheckBox() {
+		clickSoundComboBox = new JComboBox<String>(getSoundNames());
+		clickSoundComboBox.setSize(clickSoundComboBoxDimension);
+		
+		placeSoundComboBox();
+		
+		mainFramePane.add(clickSoundComboBox);
+	}
+	
+	private Vector<String> getSoundNames() {
+		Vector<String> soundName = new Vector<String>();
+		int numberOfSounds = click.getNumberOfClickSounds();
+		for(int i = 0; i < numberOfSounds; i++) {
+			soundName.add(click.getClickSoundClipName(i));
+		}
+		return soundName;
+	}
+	
+	private void placeSoundComboBox() {
+		int x = getXValueToPlaceComponentInTheCenter(clickSoundComboBox.getWidth());
+		int y = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
+				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
+		clickSoundComboBox.setLocation(x, y);
 	}
 }
