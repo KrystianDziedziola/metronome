@@ -1,9 +1,6 @@
 package edu.metronome.logic;
 
-import java.lang.String;
-import java.net.URL;
-import javax.sound.sampled.*;
-import java.io.*;
+import java.util.*;
 
 public class Click {
 	
@@ -17,8 +14,9 @@ public class Click {
 	private int currentTempo = DEFAULT_TEMPO;
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
-	private String currentClickSoundFileName = "woodBlockClick.wav";
-	private Clip clickSoundClip = null;
+	
+	private List<ClickSoundClip> clickSoundClip = new ArrayList<ClickSoundClip>();
+	private int indexOfCurrentlyChosenSound = 0;
 	
 	private TempoOutOfBoundsException tempoOutOfBoundsException = 
 			new TempoOutOfBoundsException("Tempo out of bounds");
@@ -26,7 +24,7 @@ public class Click {
 	private Thread clickThread = null;
 	
 	public Click() {
-		initializeClickSound();
+		initializeClickSoundClips();
 	}
 	
 	public int getCurrentTempo() {
@@ -50,14 +48,19 @@ public class Click {
 		}
 	}
 	
+	private void initializeClickSoundClips() {
+		clickSoundClip.add(new ClickSoundClip("Wood", "woodBlockClick.wav"));
+		clickSoundClip.add(new ClickSoundClip("Steel", "steelBlockClick.wav"));
+	}
+	
 	private void createClickThread() {
 		clickThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while(isPlaying) {
-					clickSoundClip.start();
+					clickSoundClip.get(indexOfCurrentlyChosenSound).play();
 					pauseClickThread(timeBetweenClicksInMilliseconds);
-					resetClickSoundClip();
+					clickSoundClip.get(indexOfCurrentlyChosenSound).reset();
 				}
 			}
 		});
@@ -71,11 +74,6 @@ public class Click {
 		}
 	}
 	
-	private void resetClickSoundClip() {
-		clickSoundClip.flush();
-		clickSoundClip.setFramePosition(0);
-	}
-	
 	public void stop() {
 		isPlaying = false;
 		clickThread = null;
@@ -83,21 +81,6 @@ public class Click {
 	
 	public boolean isPlaying() {
 		return isPlaying;
-	}
-	
-	private void initializeClickSound() {
-		try {
-			URL clickSoundUrl = getClass().getClassLoader().getResource(currentClickSoundFileName);
-			AudioInputStream inputStream = AudioSystem.getAudioInputStream(clickSoundUrl); 
-			clickSoundClip = AudioSystem.getClip();
-			clickSoundClip.open(inputStream);
-		} catch (UnsupportedAudioFileException e) {
-	         e.printStackTrace();
-	    } catch (IOException e) {
-	         e.printStackTrace();
-	    } catch (LineUnavailableException e) {
-	    	e.printStackTrace();
-	    }
 	}
 	
 	private int convertBmpToMilliseconds(int bpm) {
