@@ -1,6 +1,7 @@
 package edu.metronome.ui;
 
 import edu.metronome.logic.Click;
+import edu.metronome.logic.ClickSoundIndexOutOfBoundsException;
 import edu.metronome.logic.TempoOutOfBoundsException;
 
 import javax.swing.JFrame;
@@ -227,11 +228,25 @@ public class MainWindow {
 	
 	private void initializeClickSoundCheckBox() {
 		clickSoundComboBox = new JComboBox<String>(getSoundNames());
+		defineClickSoundComboBoxChangeEvent();
 		clickSoundComboBox.setSize(clickSoundComboBoxDimension);
 		
 		placeSoundComboBox();
 		
 		mainFramePane.add(clickSoundComboBox);
+	}
+	
+	private void defineClickSoundComboBoxChangeEvent() {
+		clickSoundComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedSoundIndex = clickSoundComboBox.getSelectedIndex();
+				try {
+					click.setCurrentClickSound(selectedSoundIndex);
+				} catch (ClickSoundIndexOutOfBoundsException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	private Vector<String> getSoundNames() {

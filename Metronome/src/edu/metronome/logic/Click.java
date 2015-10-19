@@ -15,11 +15,13 @@ public class Click {
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
 	
-	private Vector<ClickSoundClip> clickSoundClip = new Vector<ClickSoundClip>();
+	private ArrayList<ClickSoundClip> clickSoundClip = new ArrayList<ClickSoundClip>();
 	private int indexOfCurrentlyChosenSound = 0;
 	
 	private TempoOutOfBoundsException tempoOutOfBoundsException = 
-			new TempoOutOfBoundsException("Tempo out of bounds");
+			new TempoOutOfBoundsException();
+	private ClickSoundIndexOutOfBoundsException clickSoundIndexOutOfBoundsException = 
+			new ClickSoundIndexOutOfBoundsException();
 	
 	private Thread clickThread = null;
 	
@@ -63,6 +65,14 @@ public class Click {
 	
 	public int getNumberOfClickSounds() {
 		return ClickSoundClip.getNumberOfSounds();
+	}
+	
+	public void setCurrentClickSound(int index) throws ClickSoundIndexOutOfBoundsException {
+		if((index < 0) || (index >= ClickSoundClip.getNumberOfSounds())) {
+			throw clickSoundIndexOutOfBoundsException;
+		} else {
+			indexOfCurrentlyChosenSound = index;
+		}
 	}
 	
 	
