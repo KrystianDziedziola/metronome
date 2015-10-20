@@ -5,11 +5,13 @@ import edu.metronome.logic.ClickSoundIndexOutOfBoundsException;
 import edu.metronome.logic.TempoOutOfBoundsException;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -27,6 +29,7 @@ import java.awt.Font;
 
 import java.lang.String;
 import java.util.*;
+import java.awt.GridLayout;
 
 
 public class MainWindow {
@@ -34,7 +37,7 @@ public class MainWindow {
 	private Click click = new Click();
 	
 	private final int TOP_MARIGIN_IN_PIXELS = 50;
-	private final int BOTTOM_MARIGIN_IN_PIXELS = 50;
+	private final int BOTTOM_MARIGIN_IN_PIXELS = 15;
 	private final int TEMPO_SPINNER_BOTTOM_MARIGIN = 20;
 	private final int TEMPO_SLIDER_BOTTOM_MARIGIN = 30;
 	
@@ -47,6 +50,11 @@ public class MainWindow {
 	private final int TEMPO_STEP_SIZE_FOR_SPINNER = 1;
 	private final int MINOR_TICK_SIZE_FOR_SLIDER = 10;
 	private final int MAJOR_TICK_SIZE_FOR_SLIDER = 50;
+	
+	private final int PROPERTIES_PANEL_ROWS_COUNT = 2;
+	private final int PROPERTIES_PANEL_COLUMNS_COUNT = 3;
+	private final int PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
+	private final int PROPERTIES_PANEL_VERTICAL_GAP = 0;
 	
 	private Container mainFramePane;
 	
@@ -63,10 +71,14 @@ public class MainWindow {
 	private Dimension tempoSliderDimension = new Dimension(250, 45);
 	
 	private JPanel propertiesPanel;
-	private Dimension propertiesPanelDimension = new Dimension(250, 130);
+	private Dimension propertiesPanelDimension = new Dimension(250, 50);
+	private GridLayout propertiesPanelGridLayout;
 	
+	private JLabel clickSoundLabel;
 	private JComboBox<String> clickSoundComboBox;
-	private Dimension clickSoundComboBoxDimension = new Dimension(100, 20);
+	
+	private JLabel accentLabel;
+	private JComboBox<Integer> accentComboBox;
 
 	public MainWindow() {
 		initialize();
@@ -83,7 +95,10 @@ public class MainWindow {
 		initializeTempoSlider();
 		
 		initializePropertiesPanel();
+		initializeClickSoundLabel();
+		initializeAccentLabel();
 		initializeClickSoundCheckBox();
+		initializeAccentCheckBox();
 	}
 	
 	private void initializeMainFrame() {
@@ -240,9 +255,16 @@ public class MainWindow {
 	private void initializePropertiesPanel() {
 		propertiesPanel = new JPanel();
 		propertiesPanel.setSize(propertiesPanelDimension);
-		propertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//propertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		setPropertiesPanelLayout();
 		placePropertiesPanel();
 		mainFramePane.add(propertiesPanel);
+	}
+	
+	private void setPropertiesPanelLayout() {
+		propertiesPanelGridLayout = new GridLayout(PROPERTIES_PANEL_ROWS_COUNT, PROPERTIES_PANEL_COLUMNS_COUNT,
+												PROPERTIES_PANEL_HORIZONTAL_GAP, PROPERTIES_PANEL_VERTICAL_GAP);
+		propertiesPanel.setLayout(propertiesPanelGridLayout);
 	}
 	
 	private void placePropertiesPanel() {
@@ -251,12 +273,15 @@ public class MainWindow {
 		centerComponent(propertiesPanel, topMarigin);
 	}
 	
+	private void initializeClickSoundLabel() {
+		clickSoundLabel = new JLabel("Click sound:"/*, SwingConstants.CENTER*/);
+		propertiesPanel.add(clickSoundLabel);
+	}
+	
 	private void initializeClickSoundCheckBox() {
 		clickSoundComboBox = new JComboBox<String>(getSoundNames());
 		defineClickSoundComboBoxChangeEvent();
-		clickSoundComboBox.setSize(clickSoundComboBoxDimension);
-		placeSoundComboBox();
-		mainFramePane.add(clickSoundComboBox);
+		propertiesPanel.add(clickSoundComboBox);
 	}
 	
 	private void defineClickSoundComboBoxChangeEvent() {
@@ -281,9 +306,15 @@ public class MainWindow {
 		return soundName;
 	}
 	
-	private void placeSoundComboBox() {
-		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
-				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
-		centerComponent(clickSoundComboBox, topMarigin);
+	private void initializeAccentLabel() {
+		accentLabel = new JLabel("Accent beat:"/*, SwingConstants.CENTER*/);
+		propertiesPanel.add(accentLabel);
 	}
+	
+	private void initializeAccentCheckBox() {
+		accentComboBox = new JComboBox<Integer>();
+		//defineAccentComboBoxChangeEvent();
+		propertiesPanel.add(accentComboBox);
+	}
+
 }
