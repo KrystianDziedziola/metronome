@@ -127,9 +127,14 @@ public class MainWindow {
 	}
 	
 	private void placeTogglePlayButton() {
-		int x = getXValueToPlaceComponentInTheCenter(togglePlayButton.getWidth());
-		int y = mainFrame.getWidth() - BOTTOM_MARIGIN_IN_PIXELS;
-		togglePlayButton.setLocation(x, y);
+		int topMarigin = mainFrame.getWidth() - BOTTOM_MARIGIN_IN_PIXELS;
+		centerComponent(togglePlayButton, topMarigin);
+	}
+	
+	private void centerComponent(JComponent componentName, int topMarigin) {
+		int x = getXValueToPlaceComponentInTheCenter(componentName.getWidth());
+		int y = topMarigin;
+		componentName.setLocation(x, y);
 	}
 	
 	private int getXValueToPlaceComponentInTheCenter(int componentWidth) {
@@ -160,9 +165,8 @@ public class MainWindow {
 	}
 	
 	private void placeTempoSpinner() {
-		int x = getXValueToPlaceComponentInTheCenter(tempoSpinner.getWidth());
-		int y = TOP_MARIGIN_IN_PIXELS;
-		tempoSpinner.setLocation(x, y);
+		int topMarigin = TOP_MARIGIN_IN_PIXELS;
+		centerComponent(tempoSpinner, topMarigin);
 	}
 	
 	private void defineTempoSpinnerChangeEvent() {
@@ -207,9 +211,8 @@ public class MainWindow {
 	}
 	
 	private void placeTempoSlider() {
-		int x = getXValueToPlaceComponentInTheCenter(tempoSlider.getWidth());
-		int y = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + TEMPO_SPINNER_BOTTOM_MARIGIN;
-		tempoSlider.setLocation(x, y);
+		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + TEMPO_SPINNER_BOTTOM_MARIGIN;
+		centerComponent(tempoSlider, topMarigin);
 	}
 	
 	private void defineTempoSliderChangeEvent() {
@@ -230,9 +233,7 @@ public class MainWindow {
 		clickSoundComboBox = new JComboBox<String>(getSoundNames());
 		defineClickSoundComboBoxChangeEvent();
 		clickSoundComboBox.setSize(clickSoundComboBoxDimension);
-		
 		placeSoundComboBox();
-		
 		mainFramePane.add(clickSoundComboBox);
 	}
 	
@@ -259,9 +260,10 @@ public class MainWindow {
 	}
 	
 	private void placeSoundComboBox() {
-		int x = getXValueToPlaceComponentInTheCenter(clickSoundComboBox.getWidth());
-		int y = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
+		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
 				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
-		clickSoundComboBox.setLocation(x, y);
+		centerComponent(clickSoundComboBox, topMarigin);
 	}
+	
+
 }
