@@ -5,6 +5,8 @@ import edu.metronome.logic.ClickSoundIndexOutOfBoundsException;
 import edu.metronome.logic.TempoOutOfBoundsException;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -19,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 
@@ -59,6 +62,9 @@ public class MainWindow {
 	private JSlider tempoSlider;
 	private Dimension tempoSliderDimension = new Dimension(250, 45);
 	
+	private JPanel propertiesPanel;
+	private Dimension propertiesPanelDimension = new Dimension(250, 130);
+	
 	private JComboBox<String> clickSoundComboBox;
 	private Dimension clickSoundComboBoxDimension = new Dimension(100, 20);
 
@@ -72,15 +78,17 @@ public class MainWindow {
 
 	private void initialize() {
 		initializeMainFrame();
-		mainFramePane = mainFrame.getContentPane();
 		initializeButtons();
 		initializeTempoSpinner();
 		initializeTempoSlider();
+		
+		initializePropertiesPanel();
 		initializeClickSoundCheckBox();
 	}
 	
 	private void initializeMainFrame() {
 		mainFrame = new JFrame();
+		mainFramePane = mainFrame.getContentPane();
 		setupMainFrameProperties();
 		centerMainFrame();
 	}
@@ -229,6 +237,20 @@ public class MainWindow {
 		});
 	}
 	
+	private void initializePropertiesPanel() {
+		propertiesPanel = new JPanel();
+		propertiesPanel.setSize(propertiesPanelDimension);
+		propertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		placePropertiesPanel();
+		mainFramePane.add(propertiesPanel);
+	}
+	
+	private void placePropertiesPanel() {
+		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
+				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
+		centerComponent(propertiesPanel, topMarigin);
+	}
+	
 	private void initializeClickSoundCheckBox() {
 		clickSoundComboBox = new JComboBox<String>(getSoundNames());
 		defineClickSoundComboBoxChangeEvent();
@@ -264,6 +286,4 @@ public class MainWindow {
 				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
 		centerComponent(clickSoundComboBox, topMarigin);
 	}
-	
-
 }
