@@ -15,7 +15,8 @@ public class Click {
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
 	
-	private ArrayList<ClickSoundClip> clickSoundClip = new ArrayList<ClickSoundClip>();
+	
+	private ArrayList<ClickSound> clickSoundClip = new ArrayList<ClickSound>();
 	private int indexOfCurrentlyChosenSound = 0;
 	
 	private TempoOutOfBoundsException tempoOutOfBoundsException = 
@@ -64,11 +65,11 @@ public class Click {
 	}
 	
 	public int getNumberOfClickSounds() {
-		return ClickSoundClip.getNumberOfSounds();
+		return ClickSound.getNumberOfSounds();
 	}
 	
 	public void setCurrentClickSound(int index) throws ClickSoundIndexOutOfBoundsException {
-		if((index < 0) || (index >= ClickSoundClip.getNumberOfSounds())) {
+		if((index < 0) || (index >= ClickSound.getNumberOfSounds())) {
 			throw clickSoundIndexOutOfBoundsException;
 		} else {
 			indexOfCurrentlyChosenSound = index;
@@ -77,8 +78,9 @@ public class Click {
 	
 	
 	private void initializeClickSoundClips() {
-		clickSoundClip.add(new ClickSoundClip("Wood", "woodBlockClick.wav"));
-		clickSoundClip.add(new ClickSoundClip("Steel", "steelBlockClick.wav"));
+		//clickSoundClip.add(new ClickSound("Wood", "woodBlockClick.wav"));
+		//clickSoundClip.add(new ClickSound("Steel", "steelBlockClick.wav"));
+		clickSoundClip.add(new ClickSound("Cowbell", "cowbell.wav", "cowbellAccent.wav"));
 	}
 	
 	private void createClickThread() {
@@ -86,9 +88,10 @@ public class Click {
 			@Override
 			public void run() {
 				while(isPlaying) {
-					clickSoundClip.get(indexOfCurrentlyChosenSound).play();
+					//TODO: dorobic granie akcentow i wybieranie 
+					clickSoundClip.get(indexOfCurrentlyChosenSound).playUnaccentedSound();
 					pauseClickThread(timeBetweenClicksInMilliseconds);
-					clickSoundClip.get(indexOfCurrentlyChosenSound).reset();
+					clickSoundClip.get(indexOfCurrentlyChosenSound).resetUnaccentedSound();
 				}
 			}
 		});
