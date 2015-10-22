@@ -23,21 +23,13 @@ public class ClickSound {
 	}
 	
 	public void playAccentedSound() {
+		resetAccentedSound();
 		accentedSoundClip.start();
 	}
 	
 	public void playUnaccentedSound() {
+		resetUnaccentedSound();
 		unaccentedSoundClip.start();
-	}
-	
-	public void resetAccentedSound() {
-		accentedSoundClip.flush();
-		accentedSoundClip.setFramePosition(0);
-	}
-	
-	public void resetUnaccentedSound() {
-		unaccentedSoundClip.flush();
-		unaccentedSoundClip.setFramePosition(0);
 	}
 	
 	public String getSoundName() {
@@ -46,6 +38,16 @@ public class ClickSound {
 	
 	public static int getNumberOfSounds() {
 		return numberOfSounds;
+	}
+	
+	private void resetAccentedSound() {
+		accentedSoundClip.flush();
+		accentedSoundClip.setFramePosition(0);
+	}
+	
+	private void resetUnaccentedSound() {
+		unaccentedSoundClip.flush();
+		unaccentedSoundClip.setFramePosition(0);
 	}
 	
 	private void initializeClickSounds() {
@@ -61,7 +63,6 @@ public class ClickSound {
 	    }
 	}
 	
-	//TODO: jak przez referencjê?
 	private Clip getSoundClip(String soundFileName) 
 			throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		URL clickSoundUrl = getClass().getClassLoader().getResource(soundFileName);

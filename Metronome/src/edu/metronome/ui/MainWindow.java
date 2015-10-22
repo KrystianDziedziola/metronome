@@ -1,5 +1,6 @@
 package edu.metronome.ui;
 
+import edu.metronome.logic.BeatsPerBarOutOfBoundsException;
 import edu.metronome.logic.Click;
 import edu.metronome.logic.ClickSoundIndexOutOfBoundsException;
 import edu.metronome.logic.TempoOutOfBoundsException;
@@ -77,8 +78,8 @@ public class MainWindow {
 	private JLabel clickSoundLabel;
 	private JComboBox<String> clickSoundComboBox;
 	
-	private JLabel accentLabel;
-	private JComboBox<Integer> accentComboBox;
+	private JLabel beatsPerBarLabel;
+	private JComboBox<Integer> beatsPerBarComboBox;
 
 	public MainWindow() {
 		initialize();
@@ -96,9 +97,9 @@ public class MainWindow {
 		
 		initializePropertiesPanel();
 		initializeClickSoundLabel();
-		initializeAccentLabel();
+		initializeBeatsPerBarLabel();
 		initializeClickSoundCheckBox();
-		initializeAccentCheckBox();
+		initializeBeatsPerBarCheckBox();
 	}
 	
 	private void initializeMainFrame() {
@@ -306,15 +307,38 @@ public class MainWindow {
 		return soundName;
 	}
 	
-	private void initializeAccentLabel() {
-		accentLabel = new JLabel("Accent beat:"/*, SwingConstants.CENTER*/);
-		propertiesPanel.add(accentLabel);
+	private void initializeBeatsPerBarLabel() {
+		beatsPerBarLabel = new JLabel("Beats per bar:"/*, SwingConstants.CENTER*/);
+		propertiesPanel.add(beatsPerBarLabel);
 	}
 	
-	private void initializeAccentCheckBox() {
-		accentComboBox = new JComboBox<Integer>();
-		//defineAccentComboBoxChangeEvent();
-		propertiesPanel.add(accentComboBox);
+	private Vector<Integer> getBeatsPerBarValues() {
+		Vector<Integer> beatsPerBar = new Vector<Integer>();
+		for(int beatsCount = click.MINIMUM_BEATS_PER_BAR; beatsCount <= click.MAXIMUM_BEATS_PER_BAR; beatsCount++) {
+			beatsPerBar.add(beatsCount);
+		}
+		return beatsPerBar;
+	}
+	
+	private void initializeBeatsPerBarCheckBox() {
+		beatsPerBarComboBox = new JComboBox<Integer>(getBeatsPerBarValues());
+		int defaultIndex = click.DEFAULT_BEATS_PER_BAR - 1;
+		beatsPerBarComboBox.setSelectedIndex(defaultIndex);
+		defineBeatsPerBarComboBoxChangeEvent();
+		propertiesPanel.add(beatsPerBarComboBox);
+	}
+	
+	private void defineBeatsPerBarComboBoxChangeEvent() {
+		beatsPerBarComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedBeatPerBarValue = (int) beatsPerBarComboBox.getSelectedItem();
+				try {
+					click.setBeatsPerBar(selectedBeatPerBarValue);
+				} catch (BeatsPerBarOutOfBoundsException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 }

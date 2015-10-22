@@ -7,14 +7,17 @@ public class Click {
 	public final int MINIMUM_TEMPO = 30;
 	public final int MAXIMUM_TEMPO = 230;
 	public final int DEFAULT_TEMPO = 120;
+	public final int MINIMUM_BEATS_PER_BAR = 1;
+	public final int MAXIMUM_BEATS_PER_BAR = 9;
+	public final int DEFAULT_BEATS_PER_BAR = 4;
 	
 	private final int SECONDS_PER_MINUTE = 60;
 	private final int MILLISECONDS_PER_SECOND = 1000;
+	private final int BEAT_AT_BEGINNING_OF_BAR = 1;
 	
 	private int currentTempo = DEFAULT_TEMPO;
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
 	private boolean isPlaying = false;
-	
 	
 	private ArrayList<ClickSound> clickSoundClip = new ArrayList<ClickSound>();
 	private int indexOfCurrentlyChosenSound = 0;
@@ -23,8 +26,13 @@ public class Click {
 			new TempoOutOfBoundsException();
 	private ClickSoundIndexOutOfBoundsException clickSoundIndexOutOfBoundsException = 
 			new ClickSoundIndexOutOfBoundsException();
+	private BeatsPerBarOutOfBoundsException beatsPerBarOutOfBoundsException = 
+			new BeatsPerBarOutOfBoundsException();
 	
 	private Thread clickThread = null;
+	
+	private int currentBeat = 1;
+	private int beatsPerBar = 4;
 	
 	public Click() {
 		initializeClickSoundClips();
@@ -69,18 +77,28 @@ public class Click {
 	}
 	
 	public void setCurrentClickSound(int index) throws ClickSoundIndexOutOfBoundsException {
-		if((index < 0) || (index >= ClickSound.getNumberOfSounds())) {
-			throw clickSoundIndexOutOfBoundsException;
-		} else {
+		if((index >= 0) && (index < ClickSound.getNumberOfSounds())) {
 			indexOfCurrentlyChosenSound = index;
+		} else {
+			throw clickSoundIndexOutOfBoundsException;
+		}
+	}
+	
+	public void setBeatsPerBar(int beatsPerBar) throws BeatsPerBarOutOfBoundsException {
+		if((beatsPerBar >= MINIMUM_BEATS_PER_BAR) && (beatsPerBar <= MAXIMUM_BEATS_PER_BAR)) {
+			this.beatsPerBar = beatsPerBar;
+		} else {
+			throw beatsPerBarOutOfBoundsException;
 		}
 	}
 	
 	
 	private void initializeClickSoundClips() {
-		//clickSoundClip.add(new ClickSound("Wood", "woodBlockClick.wav"));
-		//clickSoundClip.add(new ClickSound("Steel", "steelBlockClick.wav"));
 		clickSoundClip.add(new ClickSound("Cowbell", "cowbell.wav", "cowbellAccent.wav"));
+		//clickSoundClip.add(new ClickSound("Clave", "clave.wav", "claveAccent.wav"));
+		//clickSoundClip.add(new ClickSound("Ping", "ping.wav", "pingAccent.wav"));
+		//clickSoundClip.add(new ClickSound("Rim", "rim.wav", "rimAccent.wav"));
+		clickSoundClip.add(new ClickSound("Classic", "classic.wav", "classicAccent.wav"));
 	}
 	
 	private void createClickThread() {
@@ -88,13 +106,20 @@ public class Click {
 			@Override
 			public void run() {
 				while(isPlaying) {
-					//TODO: dorobic granie akcentow i wybieranie 
-					clickSoundClip.get(indexOfCurrentlyChosenSound).playUnaccentedSound();
+					playAppropriateClickSound();
 					pauseClickThread(timeBetweenClicksInMilliseconds);
-					clickSoundClip.get(indexOfCurrentlyChosenSound).resetUnaccentedSound();
+					increaseCurrentBeat();
 				}
 			}
 		});
+	}
+	
+	private void playAppropriateClickSound() {
+		if(currentBeat == BEAT_AT_BEGINNING_OF_BAR) {
+			clickSoundClip.get(indexOfCurrentlyChosenSound).playAccentedSound();
+		} else {
+			clickSoundClip.get(indexOfCurrentlyChosenSound).playUnaccentedSound();
+		}
 	}
 	
 	private void pauseClickThread(int timeInMilliseconds) {
@@ -109,5 +134,13 @@ public class Click {
 		double beatsPerSecond = (double) SECONDS_PER_MINUTE / (double) bpm;
 		double millisecondsBetweenClick = beatsPerSecond * MILLISECONDS_PER_SECOND;
 		return (int) Math.round(millisecondsBetweenClick);
+	}
+	
+	private void increaseCurrentBeat() {
+		if(currentBeat < beatsPerBar) {
+			currentBeat++;
+		} else {
+			currentBeat = BEAT_AT_BEGINNING_OF_BAR;
+		}
 	}
 }
