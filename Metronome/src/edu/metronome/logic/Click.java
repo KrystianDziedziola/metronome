@@ -10,6 +10,12 @@ public class Click {
 	public final int MINIMUM_BEATS_PER_BAR = 1;
 	public final int MAXIMUM_BEATS_PER_BAR = 9;
 	public final int DEFAULT_BEATS_PER_BAR = 4;
+	public final int MAXIMUM_NUMBER_OF_BARS_WITH_CLICK = 8;
+	public final int MINIMUM_NUMBER_OF_BARS_WITH_CLICK = 1;
+	public final int DEFAULT_NUMBER_OF_BARS_WITH_CLICK = 3;
+	public final int MAXIMUM_NUMBER_OF_BARS_WITHOUT_CLICK = 8;
+	public final int MINIMUM_NUMBER_OF_BARS_WITHOUT_CLICK = 1;
+	public final int DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK = 1;
 	
 	private final int SECONDS_PER_MINUTE = 60;
 	private final int MILLISECONDS_PER_SECOND = 1000;
@@ -52,7 +58,7 @@ public class Click {
 	}
 	
 	public void play() {
-		isPlaying = true;
+		prepareForPlaying();
 		if(clickThread == null) {
 			createClickThread();
 			clickThread.start();
@@ -95,10 +101,11 @@ public class Click {
 	
 	private void initializeClickSoundClips() {
 		clickSoundClip.add(new ClickSound("Cowbell", "cowbell.wav", "cowbellAccent.wav"));
+		clickSoundClip.add(new ClickSound("Classic", "classic.wav", "classicAccent.wav"));
 		//clickSoundClip.add(new ClickSound("Clave", "clave.wav", "claveAccent.wav"));
 		//clickSoundClip.add(new ClickSound("Ping", "ping.wav", "pingAccent.wav"));
 		//clickSoundClip.add(new ClickSound("Rim", "rim.wav", "rimAccent.wav"));
-		clickSoundClip.add(new ClickSound("Classic", "classic.wav", "classicAccent.wav"));
+		//FIXME: do they don't work because of their format?
 	}
 	
 	private void createClickThread() {
@@ -142,5 +149,10 @@ public class Click {
 		} else {
 			currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 		}
+	}
+	
+	private void prepareForPlaying() {
+		isPlaying = true;
+		currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 	}
 }

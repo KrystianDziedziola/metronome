@@ -12,7 +12,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -41,6 +40,7 @@ public class MainWindow {
 	private final int BOTTOM_MARIGIN_IN_PIXELS = 15;
 	private final int TEMPO_SPINNER_BOTTOM_MARIGIN = 20;
 	private final int TEMPO_SLIDER_BOTTOM_MARIGIN = 30;
+	private final int BASIC_PROPERTIES_PANEL_BOTTOM_MARIGIN = 15;
 	
 	private final String FONT_NAME = "Tahoma";
 	private final int FONT_SIZE_IN_TEMPO_SPINNER = 50;
@@ -52,10 +52,15 @@ public class MainWindow {
 	private final int MINOR_TICK_SIZE_FOR_SLIDER = 10;
 	private final int MAJOR_TICK_SIZE_FOR_SLIDER = 50;
 	
-	private final int PROPERTIES_PANEL_ROWS_COUNT = 2;
-	private final int PROPERTIES_PANEL_COLUMNS_COUNT = 3;
-	private final int PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
-	private final int PROPERTIES_PANEL_VERTICAL_GAP = 0;
+	private final int BASIC_PROPERTIES_PANEL_ROWS_COUNT = 2;
+	private final int BASIC_PROPERTIES_PANEL_COLUMNS_COUNT = 2;
+	private final int BASIC_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
+	private final int BASIC_PROPERTIES_PANEL_VERTICAL_GAP = 0;
+	
+	private final int TIME_TRAINER_PROPERTIES_PANEL_ROWS_COUNT = 2;
+	private final int TIME_TRAINER_PROPERTIES_PANEL_COLUMNS_COUNT = 2;
+	private final int TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
+	private final int TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP = 0;
 	
 	private Container mainFramePane;
 	
@@ -71,15 +76,25 @@ public class MainWindow {
 	private JSlider tempoSlider;
 	private Dimension tempoSliderDimension = new Dimension(250, 45);
 	
-	private JPanel propertiesPanel;
-	private Dimension propertiesPanelDimension = new Dimension(250, 50);
-	private GridLayout propertiesPanelGridLayout;
+	private JPanel basicPropertiesPanel;
+	private Dimension basicPropertiesPanelDimension = new Dimension(250, 50);
+	private GridLayout basicPropertiesPanelGridLayout;
 	
 	private JLabel clickSoundLabel;
 	private JComboBox<String> clickSoundComboBox;
 	
 	private JLabel beatsPerBarLabel;
 	private JComboBox<Integer> beatsPerBarComboBox;
+	
+	private JPanel timeTrainerPropertiesPanel;
+	private Dimension timeTrainerPropertiesPanelDimension = new Dimension(250, 50);
+	private GridLayout timeTrainerPropertiesPanelGridLayout;
+	
+	private JLabel numberOfBarsWithClickLabel;
+	private JComboBox<Integer> numberOfBarsWithClickComboBox;
+	
+	private JLabel numberOfBarsWithoutClickLabel;
+	private JComboBox<Integer> numberOfBarsWithoutClickComboBox;
 
 	public MainWindow() {
 		initialize();
@@ -91,15 +106,12 @@ public class MainWindow {
 
 	private void initialize() {
 		initializeMainFrame();
-		initializeButtons();
-		initializeTempoSpinner();
-		initializeTempoSlider();
+		initializeMainFrameContent();
+		initializeBasicPropertiesPanel();
+		initializeBasicPropertiesPanelContent();
+		initializeTimeTrainerPropertiesPanel();
+		initializeTimeTrainerPropertiesPanelContent();
 		
-		initializePropertiesPanel();
-		initializeClickSoundLabel();
-		initializeBeatsPerBarLabel();
-		initializeClickSoundCheckBox();
-		initializeBeatsPerBarCheckBox();
 	}
 	
 	private void initializeMainFrame() {
@@ -124,8 +136,10 @@ public class MainWindow {
 		mainFrame.setLocation(x, y);
 	}
 	
-	private void initializeButtons() {
+	private void initializeMainFrameContent() {
 		initializeTogglePlayButton();
+		initializeTempoSpinner();
+		initializeTempoSlider();
 	}
 	
 	private void initializeTogglePlayButton() {
@@ -253,36 +267,43 @@ public class MainWindow {
 		});
 	}
 	
-	private void initializePropertiesPanel() {
-		propertiesPanel = new JPanel();
-		propertiesPanel.setSize(propertiesPanelDimension);
-		//propertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		setPropertiesPanelLayout();
-		placePropertiesPanel();
-		mainFramePane.add(propertiesPanel);
+	private void initializeBasicPropertiesPanel() {
+		basicPropertiesPanel = new JPanel();
+		basicPropertiesPanel.setSize(basicPropertiesPanelDimension);
+		basicPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		setBasicPropertiesPanelLayout();
+		placeBasicPropertiesPanel();
+		mainFramePane.add(basicPropertiesPanel);
 	}
 	
-	private void setPropertiesPanelLayout() {
-		propertiesPanelGridLayout = new GridLayout(PROPERTIES_PANEL_ROWS_COUNT, PROPERTIES_PANEL_COLUMNS_COUNT,
-												PROPERTIES_PANEL_HORIZONTAL_GAP, PROPERTIES_PANEL_VERTICAL_GAP);
-		propertiesPanel.setLayout(propertiesPanelGridLayout);
+	private void setBasicPropertiesPanelLayout() {
+		basicPropertiesPanelGridLayout = new GridLayout(BASIC_PROPERTIES_PANEL_ROWS_COUNT, BASIC_PROPERTIES_PANEL_COLUMNS_COUNT,
+												BASIC_PROPERTIES_PANEL_HORIZONTAL_GAP, BASIC_PROPERTIES_PANEL_VERTICAL_GAP);
+		basicPropertiesPanel.setLayout(basicPropertiesPanelGridLayout);
 	}
 	
-	private void placePropertiesPanel() {
+	private void placeBasicPropertiesPanel() {
 		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
 				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN;
-		centerComponent(propertiesPanel, topMarigin);
+		centerComponent(basicPropertiesPanel, topMarigin);
+	}
+	
+	private void initializeBasicPropertiesPanelContent() {
+		initializeClickSoundLabel();
+		initializeBeatsPerBarLabel();
+		initializeClickSoundCheckBox();
+		initializeBeatsPerBarCheckBox();
 	}
 	
 	private void initializeClickSoundLabel() {
 		clickSoundLabel = new JLabel("Click sound:"/*, SwingConstants.CENTER*/);
-		propertiesPanel.add(clickSoundLabel);
+		basicPropertiesPanel.add(clickSoundLabel);
 	}
 	
 	private void initializeClickSoundCheckBox() {
 		clickSoundComboBox = new JComboBox<String>(getSoundNames());
 		defineClickSoundComboBoxChangeEvent();
-		propertiesPanel.add(clickSoundComboBox);
+		basicPropertiesPanel.add(clickSoundComboBox);
 	}
 	
 	private void defineClickSoundComboBoxChangeEvent() {
@@ -309,7 +330,7 @@ public class MainWindow {
 	
 	private void initializeBeatsPerBarLabel() {
 		beatsPerBarLabel = new JLabel("Beats per bar:"/*, SwingConstants.CENTER*/);
-		propertiesPanel.add(beatsPerBarLabel);
+		basicPropertiesPanel.add(beatsPerBarLabel);
 	}
 	
 	private Vector<Integer> getBeatsPerBarValues() {
@@ -325,7 +346,7 @@ public class MainWindow {
 		int defaultIndex = click.DEFAULT_BEATS_PER_BAR - 1;
 		beatsPerBarComboBox.setSelectedIndex(defaultIndex);
 		defineBeatsPerBarComboBoxChangeEvent();
-		propertiesPanel.add(beatsPerBarComboBox);
+		basicPropertiesPanel.add(beatsPerBarComboBox);
 	}
 	
 	private void defineBeatsPerBarComboBoxChangeEvent() {
@@ -340,5 +361,79 @@ public class MainWindow {
 			}
 		});
 	}
-
+	
+	private void initializeTimeTrainerPropertiesPanel() {
+		timeTrainerPropertiesPanel = new JPanel();
+		timeTrainerPropertiesPanel.setSize(timeTrainerPropertiesPanelDimension);
+		timeTrainerPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		setTimeTrainerPropertiesPanelLayout();
+		placeTimeTrainerPropertiesPanel();
+		mainFramePane.add(timeTrainerPropertiesPanel);
+	}
+	
+	private void setTimeTrainerPropertiesPanelLayout() {
+		timeTrainerPropertiesPanelGridLayout = new GridLayout(
+				TIME_TRAINER_PROPERTIES_PANEL_ROWS_COUNT, TIME_TRAINER_PROPERTIES_PANEL_COLUMNS_COUNT,
+				TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP, TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP);
+		timeTrainerPropertiesPanel.setLayout(timeTrainerPropertiesPanelGridLayout);
+	}
+	
+	private void placeTimeTrainerPropertiesPanel() {
+		int topMarigin = TOP_MARIGIN_IN_PIXELS + tempoSpinner.getHeight() + 
+				tempoSlider.getHeight() + TEMPO_SLIDER_BOTTOM_MARIGIN + 
+				basicPropertiesPanel.getHeight() + BASIC_PROPERTIES_PANEL_BOTTOM_MARIGIN;
+		centerComponent(timeTrainerPropertiesPanel, topMarigin);
+	}
+	
+	private void initializeTimeTrainerPropertiesPanelContent() {
+		initializeNumberOfBarsWithClickLabel();
+		initializeNumberOfBarsWithoutClickLabel();
+		initializeNumberOfBarsWithClickComboBox();
+		initializeNumberOfBarsWithoutClickComboBox();
+	}
+	
+	private void initializeNumberOfBarsWithClickLabel() {
+		numberOfBarsWithClickLabel = new JLabel("Bars with click:");
+		timeTrainerPropertiesPanel.add(numberOfBarsWithClickLabel);
+	}
+	
+	private void initializeNumberOfBarsWithClickComboBox() {
+		numberOfBarsWithClickComboBox = new JComboBox<Integer>(getNumberOfBarsWithClickValues());
+		int defaultIndex = click.DEFAULT_NUMBER_OF_BARS_WITH_CLICK - 1;
+		numberOfBarsWithClickComboBox.setSelectedIndex(defaultIndex);
+		//defineComboBoxChangeEvent();
+		timeTrainerPropertiesPanel.add(numberOfBarsWithClickComboBox);
+	}
+	
+	private Vector<Integer> getNumberOfBarsWithClickValues() {
+		Vector<Integer> numberOfBarsWithClick = new Vector<Integer>();
+		for(int barsCount = click.MINIMUM_NUMBER_OF_BARS_WITH_CLICK; 
+				barsCount <= click.MAXIMUM_NUMBER_OF_BARS_WITH_CLICK; barsCount++) {
+			numberOfBarsWithClick.add(barsCount);
+		}
+		return numberOfBarsWithClick;
+	}
+	//TODO: reduce some of those functions that are similar to each other
+	
+	private void initializeNumberOfBarsWithoutClickLabel() {
+		numberOfBarsWithoutClickLabel = new JLabel("Bars without click:");
+		timeTrainerPropertiesPanel.add(numberOfBarsWithoutClickLabel);
+	}
+	
+	private void initializeNumberOfBarsWithoutClickComboBox() {
+		numberOfBarsWithoutClickComboBox = new JComboBox<Integer>(getNumberOfBarsWithoutClickValues());
+		int defaultIndex = click.DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK - 1;
+		numberOfBarsWithoutClickComboBox.setSelectedIndex(defaultIndex);
+		//defineComboBoxChangeEvent();
+		timeTrainerPropertiesPanel.add(numberOfBarsWithoutClickComboBox);
+	}
+	
+	private Vector<Integer> getNumberOfBarsWithoutClickValues() {
+		Vector<Integer> numberOfBarsWithoutClick = new Vector<Integer>();
+		for(int barsCount = click.MINIMUM_NUMBER_OF_BARS_WITHOUT_CLICK; 
+				barsCount <= click.MAXIMUM_NUMBER_OF_BARS_WITHOUT_CLICK; barsCount++) {
+			numberOfBarsWithoutClick.add(barsCount);
+		}
+		return numberOfBarsWithoutClick;
+	}
 }
