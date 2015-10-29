@@ -1,9 +1,7 @@
 package edu.metronome.ui;
 
-import edu.metronome.logic.BeatsPerBarOutOfBoundsException;
+import edu.metronome.logic.exceptions.*;
 import edu.metronome.logic.Click;
-import edu.metronome.logic.ClickSoundIndexOutOfBoundsException;
-import edu.metronome.logic.TempoOutOfBoundsException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -111,7 +109,6 @@ public class MainWindow {
 		initializeBasicPropertiesPanelContent();
 		initializeTimeTrainerPropertiesPanel();
 		initializeTimeTrainerPropertiesPanelContent();
-		
 	}
 	
 	private void initializeMainFrame() {
@@ -398,42 +395,61 @@ public class MainWindow {
 	}
 	
 	private void initializeNumberOfBarsWithClickComboBox() {
-		numberOfBarsWithClickComboBox = new JComboBox<Integer>(getNumberOfBarsWithClickValues());
+		numberOfBarsWithClickComboBox = new JComboBox<Integer>(getVectorContainingNumbersOfBars(
+				click.MINIMUM_NUMBER_OF_BARS_WITH_CLICK, click.MAXIMUM_NUMBER_OF_BARS_WITH_CLICK));
 		int defaultIndex = click.DEFAULT_NUMBER_OF_BARS_WITH_CLICK - 1;
 		numberOfBarsWithClickComboBox.setSelectedIndex(defaultIndex);
-		//defineComboBoxChangeEvent();
+		defineNumberOfBarsWithClickComboBoxChangeEvent();
 		timeTrainerPropertiesPanel.add(numberOfBarsWithClickComboBox);
 	}
 	
-	private Vector<Integer> getNumberOfBarsWithClickValues() {
-		Vector<Integer> numberOfBarsWithClick = new Vector<Integer>();
-		for(int barsCount = click.MINIMUM_NUMBER_OF_BARS_WITH_CLICK; 
-				barsCount <= click.MAXIMUM_NUMBER_OF_BARS_WITH_CLICK; barsCount++) {
-			numberOfBarsWithClick.add(barsCount);
+	private Vector<Integer> getVectorContainingNumbersOfBars(int minimum, int maximum) {
+		Vector<Integer> numberOfBarsClick = new Vector<Integer>();
+		for(int barsCount = minimum; 
+				barsCount <= maximum; barsCount++) {
+			numberOfBarsClick.add(barsCount);
 		}
-		return numberOfBarsWithClick;
+		return numberOfBarsClick;
 	}
-	//TODO: reduce some of those functions that are similar to each other
+	
+	private void defineNumberOfBarsWithClickComboBoxChangeEvent() {
+		numberOfBarsWithClickComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedValue = (int) numberOfBarsWithClickComboBox.getSelectedItem();
+				try {
+					click.setNumberOfBarsWithClick(selectedValue);
+				} catch (NumberOfBarsOutOfBoundsException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
 	private void initializeNumberOfBarsWithoutClickLabel() {
-		numberOfBarsWithoutClickLabel = new JLabel("Bars without click:");
+		numberOfBarsWithoutClickLabel = new JLabel("Empty bars:");
 		timeTrainerPropertiesPanel.add(numberOfBarsWithoutClickLabel);
 	}
 	
 	private void initializeNumberOfBarsWithoutClickComboBox() {
-		numberOfBarsWithoutClickComboBox = new JComboBox<Integer>(getNumberOfBarsWithoutClickValues());
+		numberOfBarsWithoutClickComboBox = new JComboBox<Integer>(getVectorContainingNumbersOfBars(
+				click.MINIMUM_NUMBER_OF_BARS_WITHOUT_CLICK, click.MAXIMUM_NUMBER_OF_BARS_WITHOUT_CLICK));
 		int defaultIndex = click.DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK - 1;
 		numberOfBarsWithoutClickComboBox.setSelectedIndex(defaultIndex);
-		//defineComboBoxChangeEvent();
+		defineNumberOfBarsWithoutClickComboBoxChangeEvent();
 		timeTrainerPropertiesPanel.add(numberOfBarsWithoutClickComboBox);
 	}
 	
-	private Vector<Integer> getNumberOfBarsWithoutClickValues() {
-		Vector<Integer> numberOfBarsWithoutClick = new Vector<Integer>();
-		for(int barsCount = click.MINIMUM_NUMBER_OF_BARS_WITHOUT_CLICK; 
-				barsCount <= click.MAXIMUM_NUMBER_OF_BARS_WITHOUT_CLICK; barsCount++) {
-			numberOfBarsWithoutClick.add(barsCount);
-		}
-		return numberOfBarsWithoutClick;
+	private void defineNumberOfBarsWithoutClickComboBoxChangeEvent() {
+		numberOfBarsWithoutClickComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedValue = (int) numberOfBarsWithoutClickComboBox.getSelectedItem();
+				try {
+					click.setNumberOfBarsWithoutClick(selectedValue);
+				} catch (NumberOfBarsOutOfBoundsException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
+
 }

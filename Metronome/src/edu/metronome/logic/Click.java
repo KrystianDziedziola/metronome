@@ -1,6 +1,7 @@
 package edu.metronome.logic;
 
 import java.util.*;
+import edu.metronome.logic.exceptions.*;
 
 public class Click {
 	
@@ -34,11 +35,16 @@ public class Click {
 			new ClickSoundIndexOutOfBoundsException();
 	private BeatsPerBarOutOfBoundsException beatsPerBarOutOfBoundsException = 
 			new BeatsPerBarOutOfBoundsException();
+	private NumberOfBarsOutOfBoundsException numberOfBarsOutOfBoundsException = 
+			new NumberOfBarsOutOfBoundsException();
 	
 	private Thread clickThread = null;
 	
 	private int currentBeat = 1;
-	private int beatsPerBar = 4;
+	private int beatsPerBar = DEFAULT_BEATS_PER_BAR;
+	
+	private int numberOfBarsWithClick = DEFAULT_NUMBER_OF_BARS_WITH_CLICK;
+	private int numberOfBarsWithoutClick = DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK;
 	
 	public Click() {
 		initializeClickSoundClips();
@@ -98,6 +104,29 @@ public class Click {
 		}
 	}
 	
+	public void setNumberOfBarsWithClick(int number) throws NumberOfBarsOutOfBoundsException {
+		if(isNumberOfBarsInRange(number)){
+			numberOfBarsWithClick = number;
+		} else {
+			throw numberOfBarsOutOfBoundsException;
+		}
+	}
+	
+	public void setNumberOfBarsWithoutClick(int number) throws NumberOfBarsOutOfBoundsException {
+		if(isNumberOfBarsInRange(number)){
+			numberOfBarsWithoutClick = number;
+		} else {
+			throw numberOfBarsOutOfBoundsException;
+		}
+	}
+	
+	private boolean isNumberOfBarsInRange(int number) {
+		if((number >= MINIMUM_NUMBER_OF_BARS_WITH_CLICK) && (number <= MAXIMUM_NUMBER_OF_BARS_WITH_CLICK)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	private void initializeClickSoundClips() {
 		clickSoundClip.add(new ClickSound("Cowbell", "cowbell.wav", "cowbellAccent.wav"));

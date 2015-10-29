@@ -1,4 +1,4 @@
-package edu.metronome.logic;
+package edu.metronome.logic.exceptions;
 
 public class ClickSoundIndexOutOfBoundsException extends Exception{
 	
