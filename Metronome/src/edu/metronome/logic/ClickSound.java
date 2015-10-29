@@ -23,12 +23,12 @@ public class ClickSound {
 	}
 	
 	public void playAccentedSound() {
-		resetAccentedSound();
+		resetSound(accentedSoundClip);
 		accentedSoundClip.start();
 	}
 	
 	public void playUnaccentedSound() {
-		resetUnaccentedSound();
+		resetSound(unaccentedSoundClip);
 		unaccentedSoundClip.start();
 	}
 	
@@ -40,14 +40,9 @@ public class ClickSound {
 		return numberOfSounds;
 	}
 	
-	private void resetAccentedSound() {
-		accentedSoundClip.flush();
-		accentedSoundClip.setFramePosition(0);
-	}
-	
-	private void resetUnaccentedSound() {
-		unaccentedSoundClip.flush();
-		unaccentedSoundClip.setFramePosition(0);
+	private void resetSound(Clip soundName) {
+		soundName.flush();
+		soundName.setFramePosition(0);
 	}
 	
 	private void initializeClickSounds() {
