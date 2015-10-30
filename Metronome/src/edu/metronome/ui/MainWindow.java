@@ -61,7 +61,7 @@ public class MainWindow {
 	private final int TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
 	private final int TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP = 0;
 	
-	private final boolean ARE_COMPONENTS_ON_TIME_TRAINER_DEAFULTLY_ENABLED = false;
+	private final boolean ARE_COMPONENTS_ON_TIME_TRAINER_ENABLED = false;
 	
 	private Container mainFramePane;
 	
@@ -392,7 +392,7 @@ public class MainWindow {
 		initializeNumberOfBarsWithoutClickLabel();
 		initializeNumberOfBarsWithClickComboBox();
 		initializeNumberOfBarsWithoutClickComboBox();
-		setComponentsOnTimeTrainerPanelEnabled(ARE_COMPONENTS_ON_TIME_TRAINER_DEAFULTLY_ENABLED);
+		setComponentsOnTimeTrainerPanelEnabled(ARE_COMPONENTS_ON_TIME_TRAINER_ENABLED);
 		initializeIsTimeTrainerEnabledCheckBox();
 	}
 	
