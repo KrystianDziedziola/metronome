@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JSlider;
@@ -55,7 +56,7 @@ public class MainWindow {
 	private final int BASIC_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
 	private final int BASIC_PROPERTIES_PANEL_VERTICAL_GAP = 0;
 	
-	private final int TIME_TRAINER_PROPERTIES_PANEL_ROWS_COUNT = 2;
+	private final int TIME_TRAINER_PROPERTIES_PANEL_ROWS_COUNT = 3;
 	private final int TIME_TRAINER_PROPERTIES_PANEL_COLUMNS_COUNT = 2;
 	private final int TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
 	private final int TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP = 0;
@@ -85,7 +86,7 @@ public class MainWindow {
 	private JComboBox<Integer> beatsPerBarComboBox;
 	
 	private JPanel timeTrainerPropertiesPanel;
-	private Dimension timeTrainerPropertiesPanelDimension = new Dimension(250, 50);
+	private Dimension timeTrainerPropertiesPanelDimension = new Dimension(250, 75);
 	private GridLayout timeTrainerPropertiesPanelGridLayout;
 	
 	private JLabel numberOfBarsWithClickLabel;
@@ -93,6 +94,8 @@ public class MainWindow {
 	
 	private JLabel numberOfBarsWithoutClickLabel;
 	private JComboBox<Integer> numberOfBarsWithoutClickComboBox;
+	
+	private JCheckBox isTimeTrainerEnabledCheckBox;
 
 	public MainWindow() {
 		initialize();
@@ -268,12 +271,12 @@ public class MainWindow {
 		basicPropertiesPanel = new JPanel();
 		basicPropertiesPanel.setSize(basicPropertiesPanelDimension);
 		basicPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		setBasicPropertiesPanelLayout();
+		setupBasicPropertiesPanelLayout();
 		placeBasicPropertiesPanel();
 		mainFramePane.add(basicPropertiesPanel);
 	}
 	
-	private void setBasicPropertiesPanelLayout() {
+	private void setupBasicPropertiesPanelLayout() {
 		basicPropertiesPanelGridLayout = new GridLayout(BASIC_PROPERTIES_PANEL_ROWS_COUNT, BASIC_PROPERTIES_PANEL_COLUMNS_COUNT,
 												BASIC_PROPERTIES_PANEL_HORIZONTAL_GAP, BASIC_PROPERTIES_PANEL_VERTICAL_GAP);
 		basicPropertiesPanel.setLayout(basicPropertiesPanelGridLayout);
@@ -363,12 +366,12 @@ public class MainWindow {
 		timeTrainerPropertiesPanel = new JPanel();
 		timeTrainerPropertiesPanel.setSize(timeTrainerPropertiesPanelDimension);
 		timeTrainerPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		setTimeTrainerPropertiesPanelLayout();
+		setupTimeTrainerPropertiesPanelLayout();
 		placeTimeTrainerPropertiesPanel();
 		mainFramePane.add(timeTrainerPropertiesPanel);
 	}
 	
-	private void setTimeTrainerPropertiesPanelLayout() {
+	private void setupTimeTrainerPropertiesPanelLayout() {
 		timeTrainerPropertiesPanelGridLayout = new GridLayout(
 				TIME_TRAINER_PROPERTIES_PANEL_ROWS_COUNT, TIME_TRAINER_PROPERTIES_PANEL_COLUMNS_COUNT,
 				TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP, TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP);
@@ -387,6 +390,7 @@ public class MainWindow {
 		initializeNumberOfBarsWithoutClickLabel();
 		initializeNumberOfBarsWithClickComboBox();
 		initializeNumberOfBarsWithoutClickComboBox();
+		initializeIsTimeTrainerEnabledCheckBox();
 	}
 	
 	private void initializeNumberOfBarsWithClickLabel() {
@@ -452,4 +456,27 @@ public class MainWindow {
 		});
 	}
 
+	
+	//TODO: place checkbox on the bottom of panel
+	private void initializeIsTimeTrainerEnabledCheckBox() {
+		isTimeTrainerEnabledCheckBox = new JCheckBox();
+		setupIsTimeTrainerEnabledCheckBoxProperties();
+		defineIsTimeTrainerEnabledCheckBoxChangeEvent();
+		timeTrainerPropertiesPanel.add(isTimeTrainerEnabledCheckBox);
+	}
+	
+	private void setupIsTimeTrainerEnabledCheckBoxProperties() {
+		isTimeTrainerEnabledCheckBox.setText("Enable time trainer");
+		isTimeTrainerEnabledCheckBox.setSelected(click.isTimeTrainerEnabled());
+	}
+	
+	private void defineIsTimeTrainerEnabledCheckBoxChangeEvent() {
+		isTimeTrainerEnabledCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				boolean isEnabled = isTimeTrainerEnabledCheckBox.isSelected();
+				click.setTimeTrainerEnabled(isEnabled);
+			}
+		});
+	}
+	
 }

@@ -45,6 +45,9 @@ public class Click {
 	
 	private int numberOfBarsWithClick = DEFAULT_NUMBER_OF_BARS_WITH_CLICK;
 	private int numberOfBarsWithoutClick = DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK;
+	private int currentBar = 1;
+	
+	private boolean isTimeTrainerEnabled = false;
 	
 	public Click() {
 		initializeClickSoundClips();
@@ -120,6 +123,15 @@ public class Click {
 		}
 	}
 	
+	public boolean isTimeTrainerEnabled() {
+		return isTimeTrainerEnabled;
+	}
+	
+	public void setTimeTrainerEnabled(boolean isEnabled) {
+		isTimeTrainerEnabled = isEnabled;
+		System.out.println(isTimeTrainerEnabled);
+	}
+	
 	private boolean isNumberOfBarsInRange(int number) {
 		if((number >= MINIMUM_NUMBER_OF_BARS_WITH_CLICK) && (number <= MAXIMUM_NUMBER_OF_BARS_WITH_CLICK)) {
 			return true;
@@ -144,7 +156,11 @@ public class Click {
 				while(isPlaying) {
 					playAppropriateClickSound();
 					pauseClickThread(timeBetweenClicksInMilliseconds);
+					/*if(currentBeat == beatsPerBar) {
+						changeCurrentBarNumber();
+					}*/
 					increaseCurrentBeat();
+					
 				}
 			}
 		});
@@ -172,6 +188,11 @@ public class Click {
 		return (int) Math.round(millisecondsBetweenClick);
 	}
 	
+	private void changeCurrentBarNumber() {
+		//if(currentBar == )
+		currentBar++;
+	}
+	
 	private void increaseCurrentBeat() {
 		if(currentBeat < beatsPerBar) {
 			currentBeat++;
@@ -184,4 +205,5 @@ public class Click {
 		isPlaying = true;
 		currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 	}
+	
 }
