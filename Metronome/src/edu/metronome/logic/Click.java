@@ -129,7 +129,6 @@ public class Click {
 	
 	public void setTimeTrainerEnabled(boolean isEnabled) {
 		isTimeTrainerEnabled = isEnabled;
-		System.out.println(isTimeTrainerEnabled);
 	}
 	
 	private boolean isNumberOfBarsInRange(int number) {

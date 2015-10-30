@@ -61,6 +61,8 @@ public class MainWindow {
 	private final int TIME_TRAINER_PROPERTIES_PANEL_HORIZONTAL_GAP = 40;
 	private final int TIME_TRAINER_PROPERTIES_PANEL_VERTICAL_GAP = 0;
 	
+	private final boolean ARE_COMPONENTS_ON_TIME_TRAINER_DEAFULTLY_ENABLED = false;
+	
 	private Container mainFramePane;
 	
 	private JFrame mainFrame;
@@ -390,6 +392,7 @@ public class MainWindow {
 		initializeNumberOfBarsWithoutClickLabel();
 		initializeNumberOfBarsWithClickComboBox();
 		initializeNumberOfBarsWithoutClickComboBox();
+		setComponentsOnTimeTrainerPanelEnabled(ARE_COMPONENTS_ON_TIME_TRAINER_DEAFULTLY_ENABLED);
 		initializeIsTimeTrainerEnabledCheckBox();
 	}
 	
@@ -457,7 +460,7 @@ public class MainWindow {
 	}
 
 	
-	//TODO: place checkbox on the bottom of panel
+	//TODO: span all columns in bottom row for checkbox
 	private void initializeIsTimeTrainerEnabledCheckBox() {
 		isTimeTrainerEnabledCheckBox = new JCheckBox();
 		setupIsTimeTrainerEnabledCheckBoxProperties();
@@ -475,8 +478,17 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean isEnabled = isTimeTrainerEnabledCheckBox.isSelected();
 				click.setTimeTrainerEnabled(isEnabled);
+				setComponentsOnTimeTrainerPanelEnabled(isEnabled);
 			}
 		});
+	}
+	
+	private void setComponentsOnTimeTrainerPanelEnabled(boolean isEnabled) {
+		numberOfBarsWithClickComboBox.setEnabled(isEnabled);
+		numberOfBarsWithClickLabel.setEnabled(isEnabled);
+		numberOfBarsWithoutClickComboBox.setEnabled(isEnabled);
+		numberOfBarsWithoutClickLabel.setEnabled(isEnabled);
+		
 	}
 	
 }
