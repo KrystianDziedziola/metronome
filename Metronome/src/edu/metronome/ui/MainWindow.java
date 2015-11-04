@@ -272,7 +272,7 @@ public class MainWindow {
 	private void initializeBasicPropertiesPanel() {
 		basicPropertiesPanel = new JPanel();
 		basicPropertiesPanel.setSize(basicPropertiesPanelDimension);
-		basicPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//basicPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		setupBasicPropertiesPanelLayout();
 		placeBasicPropertiesPanel();
 		mainFramePane.add(basicPropertiesPanel);
@@ -367,7 +367,7 @@ public class MainWindow {
 	private void initializeTimeTrainerPropertiesPanel() {
 		timeTrainerPropertiesPanel = new JPanel();
 		timeTrainerPropertiesPanel.setSize(timeTrainerPropertiesPanelDimension);
-		timeTrainerPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//timeTrainerPropertiesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		setupTimeTrainerPropertiesPanelLayout();
 		placeTimeTrainerPropertiesPanel();
 		mainFramePane.add(timeTrainerPropertiesPanel);

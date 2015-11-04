@@ -21,6 +21,7 @@ public class Click {
 	private final int SECONDS_PER_MINUTE = 60;
 	private final int MILLISECONDS_PER_SECOND = 1000;
 	private final int BEAT_AT_BEGINNING_OF_BAR = 1;
+	private final int BAR_AT_BEGINNING = 1;
 	
 	private int currentTempo = DEFAULT_TEMPO;
 	private int timeBetweenClicksInMilliseconds = convertBmpToMilliseconds(DEFAULT_TEMPO);
@@ -40,12 +41,12 @@ public class Click {
 	
 	private Thread clickThread = null;
 	
-	private int currentBeat = 1;
+	private int currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 	private int beatsPerBar = DEFAULT_BEATS_PER_BAR;
 	
 	private int numberOfBarsWithClick = DEFAULT_NUMBER_OF_BARS_WITH_CLICK;
 	private int numberOfBarsWithoutClick = DEFAULT_NUMBER_OF_BARS_WITHOUT_CLICK;
-	private int currentBar = 1;
+	private int currentBar = BAR_AT_BEGINNING;
 	
 	private boolean isTimeTrainerEnabled = false;
 	
@@ -153,16 +154,33 @@ public class Click {
 			@Override
 			public void run() {
 				while(isPlaying) {
-					playAppropriateClickSound();
-					pauseClickThread(timeBetweenClicksInMilliseconds);
-					/*if(currentBeat == beatsPerBar) {
-						changeCurrentBarNumber();
-					}*/
-					increaseCurrentBeat();
-					
+					playSound();
+					updateBeatAndBarState();
 				}
 			}
 		});
+	}
+	
+	private void playSound() {
+		if(isTimeTrainerEnabled) {
+			playTimeTrainerSound();
+		} else {
+			playNormalSound();
+		}
+	}
+	
+	private void playTimeTrainerSound() {
+		if(currentBar > numberOfBarsWithClick) {
+			pauseClickThread(timeBetweenClicksInMilliseconds);
+		} else {
+			playAppropriateClickSound();
+			pauseClickThread(timeBetweenClicksInMilliseconds);
+		}
+	}
+	
+	private void playNormalSound() {
+		playAppropriateClickSound();
+		pauseClickThread(timeBetweenClicksInMilliseconds);
 	}
 	
 	private void playAppropriateClickSound() {
@@ -181,15 +199,22 @@ public class Click {
 		}
 	}
 	
+	private void updateBeatAndBarState() {
+		if(currentBeat == beatsPerBar) {
+			changeCurrentBarNumber();
+		}
+		increaseCurrentBeat();
+	}
+	
 	private int convertBmpToMilliseconds(int bpm) {
 		double beatsPerSecond = (double) SECONDS_PER_MINUTE / (double) bpm;
 		double millisecondsBetweenClick = beatsPerSecond * MILLISECONDS_PER_SECOND;
 		return (int) Math.round(millisecondsBetweenClick);
 	}
 	
-	private void changeCurrentBarNumber() {
-		//if(currentBar == )
-		currentBar++;
+	private void prepareForPlaying() {
+		isPlaying = true;
+		currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 	}
 	
 	private void increaseCurrentBeat() {
@@ -199,10 +224,17 @@ public class Click {
 			currentBeat = BEAT_AT_BEGINNING_OF_BAR;
 		}
 	}
-	
-	private void prepareForPlaying() {
-		isPlaying = true;
-		currentBeat = BEAT_AT_BEGINNING_OF_BAR;
+
+	private void changeCurrentBarNumber() {
+		if(currentBar == getTotalNumberOfBars()) {
+			currentBar = BAR_AT_BEGINNING;
+		} else {
+			currentBar++;
+		}
+	}
+
+	int getTotalNumberOfBars() {
+		return numberOfBarsWithClick + numberOfBarsWithoutClick;
 	}
 	
 }
