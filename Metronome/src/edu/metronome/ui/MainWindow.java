@@ -466,8 +466,6 @@ public class MainWindow {
 		});
 	}
 
-	
-	//TODO: span all columns in bottom row for checkbox
 	private void initializeIsTimeTrainerEnabledCheckBox() {
 		isTimeTrainerEnabledCheckBox = new JCheckBox();
 		setupIsTimeTrainerEnabledCheckBoxProperties();
