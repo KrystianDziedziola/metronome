@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
@@ -330,6 +331,12 @@ public class MainWindow {
 		return soundName;
 	}
 	
+	private void centerComboBoxText(JComboBox comboBox) {
+		DefaultListCellRenderer renderer = new DefaultListCellRenderer(); 
+		renderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); 
+		comboBox.setRenderer(renderer); 
+	}
+	
 	private void initializeBeatsPerBarLabel() {
 		beatsPerBarLabel = new JLabel("Beats per bar:"/*, SwingConstants.CENTER*/);
 		basicPropertiesPanel.add(beatsPerBarLabel);
@@ -470,6 +477,7 @@ public class MainWindow {
 	
 	private void setupIsTimeTrainerEnabledCheckBoxProperties() {
 		isTimeTrainerEnabledCheckBox.setText("Enable time trainer");
+		isTimeTrainerEnabledCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		isTimeTrainerEnabledCheckBox.setSelected(click.isTimeTrainerEnabled());
 	}
 	
