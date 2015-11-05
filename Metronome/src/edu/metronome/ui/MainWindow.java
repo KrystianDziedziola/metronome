@@ -488,7 +488,6 @@ public class MainWindow {
 		numberOfBarsWithClickLabel.setEnabled(isEnabled);
 		numberOfBarsWithoutClickComboBox.setEnabled(isEnabled);
 		numberOfBarsWithoutClickLabel.setEnabled(isEnabled);
-		
 	}
 	
 }

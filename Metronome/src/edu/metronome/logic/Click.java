@@ -76,6 +76,7 @@ public class Click {
 	}
 	
 	public void stop() {
+		//resetBeatAndBarState();
 		isPlaying = false;
 		clickThread = null;
 	}
@@ -215,6 +216,7 @@ public class Click {
 	private void prepareForPlaying() {
 		isPlaying = true;
 		currentBeat = BEAT_AT_BEGINNING_OF_BAR;
+		currentBar = BAR_AT_BEGINNING;
 	}
 	
 	private void increaseCurrentBeat() {
