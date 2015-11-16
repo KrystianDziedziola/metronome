@@ -195,7 +195,7 @@ public class Click {
 	private void pauseClickThread(int timeInMilliseconds) {
 		try {
 			Thread.sleep(timeInMilliseconds);
-		} catch(InterruptedException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

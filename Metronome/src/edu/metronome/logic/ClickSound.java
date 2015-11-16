@@ -48,12 +48,8 @@ public class ClickSound {
 		try {
 			unaccentedSoundClip = getSoundClip(unaccentedSoundFileName);
 			accentedSoundClip = getSoundClip(accentedSoundFileName);
-		} catch (UnsupportedAudioFileException e) {
+		} catch (Exception e) {
 	         e.printStackTrace();
-	    } catch (IOException e) {
-	         e.printStackTrace();
-	    } catch (LineUnavailableException e) {
-	    	e.printStackTrace();
 	    }
 	}
 	

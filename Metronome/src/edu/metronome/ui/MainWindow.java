@@ -217,7 +217,7 @@ public class MainWindow {
 				tempoSlider.setValue(tempoSpinnerValue);
 				try {
 					click.setTempo(tempoSpinnerValue);
-				} catch (TempoOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -263,7 +263,7 @@ public class MainWindow {
 				tempoSpinner.setValue(tempoSliderValue);
 				try {
 					click.setTempo(tempoSliderValue);
-				} catch (TempoOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -315,7 +315,7 @@ public class MainWindow {
 				int selectedSoundIndex = clickSoundComboBox.getSelectedIndex();
 				try {
 					click.setCurrentClickSound(selectedSoundIndex);
-				} catch (ClickSoundIndexOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -364,7 +364,7 @@ public class MainWindow {
 				int selectedBeatPerBarValue = (int) beatsPerBarComboBox.getSelectedItem();
 				try {
 					click.setBeatsPerBar(selectedBeatPerBarValue);
-				} catch (BeatsPerBarOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -432,7 +432,7 @@ public class MainWindow {
 				int selectedValue = (int) numberOfBarsWithClickComboBox.getSelectedItem();
 				try {
 					click.setNumberOfBarsWithClick(selectedValue);
-				} catch (NumberOfBarsOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -459,7 +459,7 @@ public class MainWindow {
 				int selectedValue = (int) numberOfBarsWithoutClickComboBox.getSelectedItem();
 				try {
 					click.setNumberOfBarsWithoutClick(selectedValue);
-				} catch (NumberOfBarsOutOfBoundsException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
